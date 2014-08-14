@@ -1,8 +1,7 @@
 -module (cases).
 
 
-insert(X, []) ->
-	[X];
+insert(X, []) -> [X];
 insert(X, Set) ->
 	case lists:member(X, Set) of
 		true -> Set;
