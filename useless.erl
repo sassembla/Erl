@@ -16,9 +16,16 @@ greet_and_add_two(X) ->
 	hello(),
 	add(X, 2).
 
+
+% これはどう違うんだろう。違わない、という答えだった。
 do(In) ->
+	io:format("A~n"),
 	In;
 do(Out) ->
+	io:format("B~n"),
 	Out;
 do(_) ->
+	io:format("C~n"),
 	100.
+
+
