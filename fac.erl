@@ -75,6 +75,42 @@ tail_duplicate_head(N, Term, Current) when N > 0 -> tail_duplicate_head(N - 1, T
 % 判断時には存在しないからまあ確かにな。
 
 
+% reverseを実装してみる話
+reverse([]) -> [];
+reverse([Head|Tail]) -> reverse(Tail) ++ [Head].
+% これだと、回数が増えると再帰回数が不味い。
+
+% どうするか？　-> 毎回ヘッドを追加すれば良い。
+tail_rev(Source) -> tail_rev(Source, []).
+
+tail_rev([], LastData) -> LastData;
+tail_rev([Head|Tail], CurrentData) -> tail_rev(Tail, [Head|CurrentData]).
+% あたまいいなーーーーいつでもパターンマッチが使えるんだ。こりゃー強力だわ。フィルタがすごく強くなった感じ。
+
+
+
+sublist(L, N) -> sublist(L, N, []).
+
+sublist(_, 0, Last) -> Last;
+sublist(0, _, Last) -> Last;
+% sublist([Head|Tail], N, Current) when N > 0 -> sublist(Tail, N - 1, [Current|Head]). X これはだめ。
+% あーーーそうか、[Current|Head] はCurrentがListだから、リストを含んだリストになっちゃうんだ。これはつらい。
+
+sublist([Head|Tail], N, CurrentList) when N > 0 -> sublist(Tail, N - 1, CurrentList ++ [Head]).
+% こんな実装でも可能だったけど、本だと、Listの結合を「入り口の関数」に対して使って、そいつをreverseさせてた。 ++重たいのかな。
+
+
+sublist2(L, N) -> lists:reverse(sublist2(L, N, [])).
+
+sublist2(_, 0, Last) -> Last;
+sublist2(0, _, Last) -> Last;
+sublist2([Head|Tail], N, Current) -> sublist2(Tail, N - 1, [Head|Current]).
+% ずるい。どっちが重たいんだろう。どのくらい差があるのかっていうと、cons の末尾が増えてくのと、 Current が肥大化してくのの差で、Current追加のほうが圧倒的に重そう。
+
+
+
+
+
 
 % 最後に寄り道して型による分岐
 typeFunc(Expression) when is_binary(Expression) -> "isBin!";
